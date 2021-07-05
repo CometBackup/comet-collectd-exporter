@@ -23,7 +23,7 @@ TypesDB "/usr/local/comet-collectd-exporter/types.db"
 LoadPlugin exec
 
 <Plugin exec>
-	Exec "nobody" "/usr/bin/python3" "/usr/local/comet-collectd-exporter/cometserver.py" "http://127.0.0.1:8060/" "admin" "admin" "my-comet-server"
+	Exec "nobody" "/usr/bin/python3" "/usr/local/comet-collectd-exporter/cometserver.py" "http://127.0.0.1:8060/" "admin" "admin" "cometserver-example"
 </Plugin>
 ```
 
