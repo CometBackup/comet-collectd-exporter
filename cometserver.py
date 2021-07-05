@@ -29,6 +29,12 @@ class CometServer(object):
 		"""List all usernames on the Comet Server"""
 		return self._request("api/v1/admin/list-users", {})
 
+	def AdminDispatcherListActive(self):
+		return self._request("api/v1/admin/dispatcher/list-active", {})
+
+	def AdminGetJobsForDateRange(self, Start: int, End: int):
+		return self._request("api/v1/admin/get-jobs-for-date-range", {"Start": Start, "End": End})
+
 	def _request(self, endpoint, extraparams):
 		"""Make API request to Comet Server and parse response JSON"""
 		apiRequest = urllib.request.Request(
@@ -48,16 +54,23 @@ class CometServer(object):
 		return ret
 
 def get_metrics(srv: CometServer):
+	start_time = int(time.time())
+
 	userList = srv.AdminListUsers()
+	liveconns = srv.AdminDispatcherListActive()
+	jobs_48h = srv.AdminGetJobsForDateRange(start_time - (86400 * 2), start_time + 180)
+
 	return {
-		"comet_user_count": len(userList)
+		"comet_user_count": len(userList),
+		"comet_liveconn_count": len(liveconns),
+		"comet_total_jobs_48h": len(jobs_48h)
 	}
 
 def main():
-	svr = CometServer(COMETSERVER_URL, COMETSERVER_USER, COMETSERVER_PASS)
+	srv = CometServer(COMETSERVER_URL, COMETSERVER_USER, COMETSERVER_PASS)
 
 	while True:
-		metrics = get_metrics(svr)
+		metrics = get_metrics(srv)
 		for key in metrics:
 			print(f"PUTVAL \"{COLLECTD_HOSTNAME}/{NAMESPACE}/{key}\" interval={COLLECTD_INTERVAL} N:{metrics[key]}")
 

@@ -31,9 +31,11 @@ Then reload the `collectd` service.
 
 ## Generated metrics
 
-|Metric             |Type  |Description
-|-------------------|------|----
-|`comet_user_count` |Gauge |The total number of user accounts on the server
+|Metric                |Type  |Description
+|----------------------|------|----
+|`comet_user_count`    |Gauge |The total number of user accounts on the server
+|`comet_liveconn_count`|Gauge |The total current number of live-connections from devices
+|`comet_total_jobs_48h`|Gauge |The total number of jobs (started or running) within the last 48 hours
 
 ## Debugging
 
