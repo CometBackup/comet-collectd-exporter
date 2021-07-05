@@ -59,7 +59,7 @@ def main():
 	while True:
 		metrics = get_metrics(svr)
 		for key in metrics:
-			print(f"PUTVAL \"{COLLECTD_HOSTNAME}/{NAMESPACE}/{key}\" interval={COLLECTD_INTERVAL} value={metrics[key]}")
+			print(f"PUTVAL \"{COLLECTD_HOSTNAME}/{NAMESPACE}/{key}\" interval={COLLECTD_INTERVAL} N:{metrics[key]}")
 
 		sys.stdout.flush()
 		time.sleep(COLLECTD_INTERVAL)
