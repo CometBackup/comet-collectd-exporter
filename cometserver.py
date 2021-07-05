@@ -35,6 +35,9 @@ class CometServer(object):
 	def AdminGetJobsForDateRange(self, Start: int, End: int):
 		return self._request("api/v1/admin/get-jobs-for-date-range", {"Start": Start, "End": End})
 
+	def AdminMetaVersion(self):
+		return self._request("api/v1/admin/meta/version", {})
+
 	def _request(self, endpoint, extraparams):
 		"""Make API request to Comet Server and parse response JSON"""
 		apiRequest = urllib.request.Request(
@@ -59,11 +62,13 @@ def get_metrics(srv: CometServer):
 	userList = srv.AdminListUsers()
 	liveconns = srv.AdminDispatcherListActive()
 	jobs_48h = srv.AdminGetJobsForDateRange(start_time - (86400 * 2), start_time + 180)
+	meta = srv.AdminMetaVersion()
 
 	return {
 		"comet_user_count": len(userList),
 		"comet_liveconn_count": len(liveconns),
-		"comet_total_jobs_48h": len(jobs_48h)
+		"comet_total_jobs_48h": len(jobs_48h),
+		"comet_uptime": start_time - meta["ServerStartTime"]
 	}
 
 def main():
