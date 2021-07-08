@@ -1,5 +1,7 @@
 # Collectd Exporter for Comet Server
 
+[![@CometBackup on Twitter](https://img.shields.io/badge/twitter-%40CometBackup-blue.svg?style=flat)](https://twitter.com/CometBackup)
+
 This is a script for [collectd](https://collectd.org/) to export metrics from a running Comet Server instance over the Comet Server HTTP API. It runs under the [Exec plugin](https://collectd.org/wiki/index.php/Plugin:Exec) and requires no additional Python library dependencies.
 
 ## Requirements
