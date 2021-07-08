@@ -57,18 +57,23 @@ class CometServer(object):
 		return ret
 
 def get_metrics(srv: CometServer):
-	start_time = int(time.time())
+	start_time = time.time()
 
 	userList = srv.AdminListUsers()
 	liveconns = srv.AdminDispatcherListActive()
-	jobs_48h = srv.AdminGetJobsForDateRange(start_time - (86400 * 2), start_time + 180)
+	jobs_48h = srv.AdminGetJobsForDateRange(int(start_time) - (86400 * 2), int(start_time) + 180)
 	meta = srv.AdminMetaVersion()
+
+	end_time = time.time()
+
+	elapsed_msecs = int((end_time - start_time) * 1000)
 
 	return {
 		"comet_user_count": len(userList),
 		"comet_liveconn_count": len(liveconns),
 		"comet_total_jobs_48h": len(jobs_48h),
-		"comet_uptime": start_time - meta["ServerStartTime"]
+		"comet_uptime": start_time - meta["ServerStartTime"],
+		"comet_total_api_time": elapsed_msecs
 	}
 
 def main():
