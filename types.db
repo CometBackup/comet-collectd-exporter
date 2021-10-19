@@ -1,5 +1,6 @@
 comet_user_count        value:GAUGE:0:U
 comet_liveconn_count    value:GAUGE:0:U
+comet_liveconn_currentversion_count value:GAUGE:0:U
 comet_total_jobs_48h    value:GAUGE:0:U
 comet_uptime            value:GAUGE:0:U
 comet_total_api_time    value:GAUGE:0:U

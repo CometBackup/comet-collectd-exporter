@@ -68,9 +68,15 @@ def get_metrics(srv: CometServer):
 
 	elapsed_msecs = int((end_time - start_time) * 1000)
 
+	liveconns_on_current_version = 0
+	for liveconn_id in liveconns:
+		if liveconns[liveconn_id]['ReportedVersion'] == meta['Version']:
+			liveconns_on_current_version += 1
+
 	return {
 		"comet_user_count": len(userList),
 		"comet_liveconn_count": len(liveconns),
+		"comet_liveconn_currentversion_count": liveconns_on_current_version,
 		"comet_total_jobs_48h": len(jobs_48h),
 		"comet_uptime": start_time - meta["ServerStartTime"],
 		"comet_total_api_time": elapsed_msecs
