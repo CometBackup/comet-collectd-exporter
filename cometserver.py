@@ -84,8 +84,8 @@ def get_metrics(srv: CometServer):
 		"comet_liveconn_count": len(liveconns),
 		"comet_liveconn_currentversion_count": liveconns_on_current_version,
 		"comet_total_jobs_48h": len(jobs_48h),
-		"comet_uptime": start_time - meta["ServerStartTime"],
-		"comet_selfbackup_age": time_since_last_successful_selfbackup,
+		"comet_uptime": int(start_time - meta["ServerStartTime"]),
+		"comet_selfbackup_age": int(time_since_last_successful_selfbackup),
 		"comet_total_api_time": elapsed_msecs
 	}
 
