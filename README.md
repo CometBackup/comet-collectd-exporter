@@ -50,3 +50,9 @@ Run collectd in the foreground:
 ```bash
 collectd -f
 ```
+
+Run the plugin directly:
+
+```bash
+COLLECTD_HOSTNAME=localhost COLLECTD_INTERVAL=30 python3 cometserver.py http://127.0.0.1:8060/ admin admin debug
+```
