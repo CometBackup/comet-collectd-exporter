@@ -41,6 +41,7 @@ Then reload the `collectd` service.
 |`comet_total_jobs_48h`|Gauge |The total number of jobs (started or running) within the last 48 hours
 |`comet_uptime`        |Gauge |The uptime of the Comet Server, in seconds
 |`comet_selfbackup_age`|Gauge |The time since the last successful Server Self-Backup, in seconds
+|`comet_version_number`|Gauge |The version number of the Comet Server, expressed as a 6-digit number
 |`comet_total_api_time`|Gauge |The time required to pull information from the Comet Server API, in milliseconds
 
 ## Debugging
