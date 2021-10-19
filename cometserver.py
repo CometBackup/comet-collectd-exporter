@@ -73,12 +73,19 @@ def get_metrics(srv: CometServer):
 		if liveconns[liveconn_id]['ReportedVersion'] == meta['Version']:
 			liveconns_on_current_version += 1
 
+	# Time since last successful Server Self-Backup
+	time_since_last_successful_selfbackup = 365 * 86400 # no self-backup runtime found = report as 1 year
+	for selfbackup_info in meta['SelfBackup']:
+		if selfbackup_info['LastRunSuccess']:
+			time_since_last_successful_selfbackup = end_time - selfbackup_info['LastRunEnd']
+
 	return {
 		"comet_user_count": len(userList),
 		"comet_liveconn_count": len(liveconns),
 		"comet_liveconn_currentversion_count": liveconns_on_current_version,
 		"comet_total_jobs_48h": len(jobs_48h),
 		"comet_uptime": start_time - meta["ServerStartTime"],
+		"comet_selfbackup_age": time_since_last_successful_selfbackup,
 		"comet_total_api_time": elapsed_msecs
 	}
 
