@@ -4,6 +4,8 @@
 
 This is a script for [collectd](https://collectd.org/) to export metrics from a running Comet Server instance over the Comet Server HTTP API. It runs under the [Exec plugin](https://collectd.org/wiki/index.php/Plugin:Exec) and requires no additional Python library dependencies.
 
+[![](doc/screenshot.thumb.jpg)](doc/screenshot.png)
+
 ## Requirements
 
 - Python 3.6 or later
