@@ -34,6 +34,9 @@ class CometServer(object):
 
 	def AdminGetJobsForDateRange(self, Start: int, End: int):
 		return self._request("api/v1/admin/get-jobs-for-date-range", {"Start": Start, "End": End})
+	
+	def AdminCountJobsForCustomSearch(self, SearchClause):
+		return self._request("api/v1/admin/count-jobs-for-custom-search", {"Query": json.dumps(SearchClause)})
 
 	def AdminMetaVersion(self):
 		return self._request("api/v1/admin/meta/version", {})
@@ -61,11 +64,25 @@ def get_metrics(srv: CometServer):
 
 	userList = srv.AdminListUsers()
 	liveconns = srv.AdminDispatcherListActive()
-	jobs_48h = srv.AdminGetJobsForDateRange(int(start_time) - (86400 * 2), int(start_time) + 180)
 	meta = srv.AdminMetaVersion()
 
-	end_time = time.time()
+	if tuple(map(int, meta["Version"].split("."))) < (22, 12, 0): # Use tuples for tripart version comparison
+		# Prior to 22.12.0, use full list API
+		jobs_48h = srv.AdminGetJobsForDateRange(int(start_time) - (86400 * 2), int(start_time) + 180)
+		num_jobs_48h = len(jobs_48h)
+	else:
+		# In 22.12.0 and later, use fast count-only API
+		jobs_48h = srv.AdminCountJobsForCustomSearch({
+			"ClauseType": "", # SEARCHCLAUSE_RULE
+			"RuleField": "BackupJobDetail.StartTime",
+			"RuleOperator": "int_gte", # SEARCHOPERATOR_INT_GTE
+			"RuleValue": str(int(start_time) - (86400 * 2))
+		})
+		num_jobs_48h = jobs_48h["Count"]
+	
+	#
 
+	end_time = time.time()
 	elapsed_msecs = int((end_time - start_time) * 1000)
 
 	liveconns_on_current_version = 0
@@ -89,7 +106,7 @@ def get_metrics(srv: CometServer):
 		"comet_user_count": len(userList),
 		"comet_liveconn_count": len(liveconns),
 		"comet_liveconn_currentversion_count": liveconns_on_current_version,
-		"comet_total_jobs_48h": len(jobs_48h),
+		"comet_total_jobs_48h": num_jobs_48h,
 		"comet_uptime": int(start_time - meta["ServerStartTime"]),
 		"comet_selfbackup_age": int(time_since_last_successful_selfbackup),
 		"comet_version_number": server_version_numeric,
